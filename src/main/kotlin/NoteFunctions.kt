@@ -1,10 +1,118 @@
-class Note (
-    val noteID: Int = 100,
-    val ownerID: Int = 100,
-    var title: String = "Note1",
-    var text: String = "Some text in note"
-) {}
+class NoteFunctions {
 
+    var bufferNoteID: Int = 100
+    var notes = ArrayList<Note>()
+    var deletedNotes = ArrayList<Note>()
+
+    fun printNotes(): Boolean {
+        println(notes)
+        return true
+    }
+
+    fun add(title: String, text: String): Int {
+        val note = Note(noteID = bufferNoteID, title = title, text = text)
+        bufferNoteID++
+        notes.add(note)
+        return note.noteID
+    }
+
+    fun edit(noteID: Int, title: String, text: String): Boolean {
+        for ((index, note) in notes.withIndex()) {
+            if (note.noteID == noteID) {
+                notes[index].title = title
+                notes[index].text = text
+                println("Заметка откорректирована")
+                return true
+            }
+        }
+        println("Не удалось откорректировать заметку")
+        return false
+    }
+
+    fun delete(noteID: Int): Boolean {
+        val commentToNoteFunctions = CommentToNoteFunctions()
+        if (isNoteDeleted(noteID)) {
+            for ((index, note) in notes.withIndex()) {
+                if (note.noteID == noteID) {
+                    deletedNotes.add(notes[index])
+                    notes.remove(notes[index])
+                    commentToNoteFunctions.deleteAllCommentsToOneNote(noteID)
+                    println("Заметка удалена")
+                    return true
+                }
+            }
+        }
+        if (!isNoteDeleted(noteID)) {
+            println("Данная заметка уже удалена")
+        }
+        println("Не удалось удалить заметку")
+        return false
+    }
+
+    fun restore(noteID: Int): Boolean {
+        if (isNote(noteID)) {
+            for ((index, note) in notes.withIndex()) {
+                if (note.noteID == noteID) {
+                    notes.add(notes[index])
+                    deletedNotes.remove(notes[index])
+                    println("Заметка восстановлена")
+                    return true
+                }
+            }
+        }
+        if (!isNote(noteID)) {
+            println("Данная заметка не удалена")
+        }
+        println("Не удалось восстановить заметку")
+        return false
+    }
+
+    fun getByID(noteID: Int, ownerID: Int = 100): Note? {
+        for ((index, note) in notes.withIndex()) {
+            if (note.noteID == noteID) {
+                println("Заметка найдена")
+                return notes[index]
+            }
+        }
+        println("Не удалось найти заметку")
+        return null
+    }
+
+    fun getNotes(noteIDs: Array<Int>, ownerID: Int = 100): ArrayList<Note>? {
+        var i: Int = 0
+        var foundNotes = ArrayList<Note>()
+        for ((index, note) in notes.withIndex()) {
+            for (i in 0..noteIDs.size) {
+                if (note.noteID == noteIDs[i])
+                    foundNotes.add(note)
+            }
+        }
+        if (foundNotes.isEmpty()) {
+            println("Не удалось найти заметку")
+            return null
+        }
+        println("Найденные заметки:")
+        return foundNotes
+    }
+
+    fun isNoteDeleted(noteID: Int): Boolean {
+        for ((index, note) in deletedNotes.withIndex()) {
+            if (note.noteID == noteID) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun isNote(noteID: Int): Boolean {
+        for ((index, note) in notes.withIndex()) {
+            if (note.noteID == noteID) {
+                return true
+            }
+        }
+        return false
+    }
+}
 
 
 /*

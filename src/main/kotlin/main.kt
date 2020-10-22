@@ -41,10 +41,10 @@ fun main() {
     println(wallservice.update(theFirstPost))
     println(theFirstPost)
 
-    var comment = CommentToPost (postID = 10, attachment = theFirstAttach)
-    wallservice.createComment(comment)
-    println(comment)
-
-
+    val noteFunctions = NoteFunctions()
+    println(noteFunctions.add("first note", "some text"))
+    noteFunctions.printNotes()
+    noteFunctions.edit(noteID = 100, title = "first edited note", text = "some another text")
+    noteFunctions.printNotes()
 
 }
