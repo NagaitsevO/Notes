@@ -6,7 +6,7 @@ class CommentToNoteFunctions {
     fun createComment(noteID: Int = 10, ownerID: Int = 100, text: String): Int {
         val comment = CommentToNote(commentID = bufferCommentID)
         bufferCommentID++
-        comments.plus(comment)
+        comments.add(comment)
         return comment.commentID
     }
 
