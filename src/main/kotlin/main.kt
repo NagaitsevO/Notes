@@ -1,6 +1,8 @@
+
 fun main() {
+
     val wallservice = WallService()
-    val theFirstComments = Comments (
+    val theFirstComments = CommentsInfoToPost (
             canPost = true
     )
     val theFirstLikes = Likes (
@@ -16,7 +18,7 @@ fun main() {
 
     val theFirstPost = Post (
             id = 1,
-            comments = theFirstComments,
+            commentsInfoToPost = theFirstComments,
             likes = theFirstLikes,
             reposts = theFirstReposts,
             viewsObject = theFirstViewsObject,
@@ -26,7 +28,7 @@ fun main() {
 
     val theSecondPost = Post (
             id = 5,
-            comments = theFirstComments,
+            commentsInfoToPost = theFirstComments,
             likes = theFirstLikes,
             reposts = theFirstReposts,
             viewsObject = theFirstViewsObject,
@@ -39,7 +41,7 @@ fun main() {
     println(wallservice.update(theFirstPost))
     println(theFirstPost)
 
-    var comment = Comment (postID = 10, attachment = theFirstAttach)
+    var comment = CommentToPost (postID = 10, attachment = theFirstAttach)
     wallservice.createComment(comment)
     println(comment)
 

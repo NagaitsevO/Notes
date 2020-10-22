@@ -2,7 +2,7 @@ import junit.framework.Assert.assertEquals
 import org.junit.Test
 
 internal class WallServiceTest {
-    val theFirstComments = Comments(
+    val theFirstComments = CommentsInfoToPost(
         canPost = true
     )
     val theFirstLikes = Likes(
@@ -18,7 +18,7 @@ internal class WallServiceTest {
 
     val theFirstPost = Post(
         id = 1,
-        comments = theFirstComments,
+        commentsInfoToPost = theFirstComments,
         likes = theFirstLikes,
         reposts = theFirstReposts,
         viewsObject = theFirstViewsObject,
@@ -45,7 +45,7 @@ internal class WallServiceTest {
     @Test
     fun updateNotRealID() {
         val wallservice = WallService()
-        val theFirstComments = Comments(
+        val theFirstComments = CommentsInfoToPost(
             canPost = true
         )
         val theFirstLikes = Likes(
@@ -58,7 +58,7 @@ internal class WallServiceTest {
 
         val theSecondPost = Post(
             id = 5,
-            comments = theFirstComments,
+            commentsInfoToPost = theFirstComments,
             likes = theFirstLikes,
             reposts = theFirstReposts,
             viewsObject = theFirstViewsObject,
@@ -71,14 +71,14 @@ internal class WallServiceTest {
     @Test(expected = PostNotFoundException::class)
     fun shouldThrowOK() {
         val wallservice = WallService()
-        var comment = Comment(postID = 1, attachment = theFirstAttach)
+        var comment = CommentToPost(postID = 1, attachment = theFirstAttach)
         wallservice.createComment(comment)
     }
 
     @Test(expected = PostNotFoundException::class)
     fun shouldThrowNotOK() {
         val wallservice = WallService()
-        var comment = Comment(postID = 10, attachment = theFirstAttach)
+        var comment = CommentToPost(postID = 10, attachment = theFirstAttach)
         wallservice.createComment(comment)
     }
 }

@@ -1,4 +1,4 @@
-data class Comment (
+data class CommentToPost (
     val id: Int = 200,
     val postID: Int = 1,
     val fromId: Int = 300,

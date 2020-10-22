@@ -1,7 +1,7 @@
 class WallService {
     private var posts = emptyArray<Post>()
     private var nextId: Int = 0
-    private var comments = emptyArray<Comment>()
+    private var comments = emptyArray<CommentToPost>()
 
     fun add(post: Post): Post {
         posts += post
@@ -23,10 +23,10 @@ class WallService {
         return false
     }
 
-    fun createComment(comment: Comment): Boolean {
+    fun createComment(commentToPost: CommentToPost): Boolean {
         for (targetPost in posts) {
-            if (targetPost.id == comment.postID) {
-                comments += comment
+            if (targetPost.id == commentToPost.postID) {
+                comments += commentToPost
                 println("Комментарий добавлен")
                 return true
             }
