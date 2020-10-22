@@ -1,15 +1,15 @@
 class CommentToNote(
+    val noteID: Int = 10,
     val commentID: Int = 100,
     val ownerID: Int = 100,
-    var title: String = "Note1",
-    var text: String = "Some text in comment",
+    var text: String = "Some text in comment"
 )
 
     var bufferCommentID: Int = 0
     var comments = ArrayList<CommentToNote>()
     var deletedComments = ArrayList<CommentToNote>()
 
-    fun createComment(noteID: Int, ownerID: Int = 100, text: String): Int {
+    fun createComment(noteID: Int = 10, ownerID: Int = 100, text: String): Int {
         val comment = CommentToNote(commentID = bufferCommentID)
         bufferCommentID++
         comments.plus(comment)
@@ -29,26 +29,46 @@ class CommentToNote(
     }
 
     fun deleteComment(commentID: Int, ownerID: Int = 100): Boolean {
-        for ((index, comment) in comments.withIndex()) {
-            if (comment.commentID == commentID) {
-                deletedComments.add(comments[index])
-                comments.remove(comments[index])
-                println("Комментарий к заметке удален")
-                return true
+        if (isCommentDeleted(commentID)) {
+            for ((index, comment) in comments.withIndex()) {
+                if (comment.commentID == commentID) {
+                    deletedComments.add(comments[index])
+                    comments.remove(comments[index])
+                    println("Комментарий к заметке удален")
+                    return true
+                }
             }
+        }
+        if (!isCommentDeleted(commentID)) {
+            println("Данный комментарий уже удалён")
         }
         println("Не удалось удалить комментарий к заметке")
         return false
     }
 
-    fun restoreComment(commentID: Int, ownerID: Int = 100): Boolean {
+    fun deleteAllCommentsToOneNote(noteID: Int): Boolean {
         for ((index, comment) in comments.withIndex()) {
-            if (comment.commentID == commentID) {
-                comments.add(comments[index])
-                deletedComments.remove(comments[index])
-                println("Комментарий к заметке восстановлен")
-                return true
+            if (comment.noteID == noteID) {
+                deleteComment(comment.commentID)
             }
+            return true
+        }
+        return false
+    }
+
+    fun restoreComment(commentID: Int, ownerID: Int = 100): Boolean {
+        if (isComment(commentID)) {
+            for ((index, comment) in comments.withIndex()) {
+                if (comment.commentID == commentID) {
+                    comments.add(comments[index])
+                    deletedComments.remove(comments[index])
+                    println("Комментарий к заметке восстановлен")
+                    return true
+                }
+            }
+        }
+        if (!isComment(commentID)) {
+            println("Данный комментарий не удалён")
         }
         println("Не удалось восстановить комментарий к заметке")
         return false
@@ -64,6 +84,24 @@ class CommentToNote(
         println("Не удалось найти комментарий")
         return null
 }
+
+    fun isCommentDeleted(commentID: Int): Boolean {
+        for ((index, comment) in deletedComments.withIndex()) {
+            if (comment.commentID == commentID) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun isComment(commentID: Int): Boolean {
+        for ((index, comment) in comments.withIndex()) {
+            if (comment.commentID == commentID) {
+                return true
+            }
+        }
+        return false
+    }
 
 /*
 ==createComment Добавляет новый комментарий к заметке. = Int (ID созданного комментария)
