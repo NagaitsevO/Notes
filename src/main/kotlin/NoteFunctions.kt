@@ -31,7 +31,7 @@ class NoteFunctions {
 
     fun delete(noteID: Int): Boolean {
         val commentToNoteFunctions = CommentToNoteFunctions()
-        if (isNoteDeleted(noteID)) {
+        if (!isNoteDeleted(noteID)) {
             for ((index, note) in notes.withIndex()) {
                 if (note.noteID == noteID) {
                     deletedNotes.add(notes[index])
@@ -42,7 +42,7 @@ class NoteFunctions {
                 }
             }
         }
-        if (!isNoteDeleted(noteID)) {
+        if (isNoteDeleted(noteID)) {
             println("Данная заметка уже удалена")
         }
         println("Не удалось удалить заметку")
@@ -50,17 +50,17 @@ class NoteFunctions {
     }
 
     fun restore(noteID: Int): Boolean {
-        if (isNote(noteID)) {
-            for ((index, note) in notes.withIndex()) {
+        if (!isNote(noteID)) {
+            for ((index, note) in deletedNotes.withIndex()) {
                 if (note.noteID == noteID) {
-                    notes.add(notes[index])
+                    notes.add(deletedNotes[index])
                     deletedNotes.remove(notes[index])
                     println("Заметка восстановлена")
                     return true
                 }
             }
         }
-        if (!isNote(noteID)) {
+        if (isNote(noteID)) {
             println("Данная заметка не удалена")
         }
         println("Не удалось восстановить заметку")

@@ -25,4 +25,23 @@ internal class NoteTest {
         noteFunctions.add("first note", "some text")
         assertEquals(false, noteFunctions.edit(noteID = 101, title = "first edited note", text = "some another text"))
     }
+
+    @Test
+    fun deleteNote() {
+        val noteFunctions = NoteFunctions()
+        val theFirstNoteID = noteFunctions.add("first note", "some text")
+        val commentToNoteFunctions = CommentToNoteFunctions()
+        commentToNoteFunctions.createComment(noteID = theFirstNoteID, text = "some text in comment")
+        assertEquals(true, noteFunctions.delete(theFirstNoteID))
+    }
+
+    @Test
+    fun restoreNote() {
+        val noteFunctions = NoteFunctions()
+        val theFirstNoteID = noteFunctions.add("first note", "some text")
+        val commentToNoteFunctions = CommentToNoteFunctions()
+        commentToNoteFunctions.createComment(noteID = theFirstNoteID, text = "some text in comment")
+        noteFunctions.delete(theFirstNoteID)
+        assertEquals(true, noteFunctions.restore(theFirstNoteID))
+    }
 }

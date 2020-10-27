@@ -47,4 +47,12 @@ fun main() {
     noteFunctions.edit(noteID = 100, title = "first edited note", text = "some another text")
     noteFunctions.printNotes()
 
+    val theFirstNoteID = noteFunctions.add("first note", "some text")
+    val commentToNoteFunctions = CommentToNoteFunctions()
+    commentToNoteFunctions.createComment(noteID = theFirstNoteID, text = "some text in comment")
+    println("theFirstNoteID = $theFirstNoteID")
+    noteFunctions.delete(theFirstNoteID)
+    println("theFirstNoteID = $theFirstNoteID")
+    noteFunctions.restore(theFirstNoteID)
+    println("theFirstNoteID = $theFirstNoteID")
 }

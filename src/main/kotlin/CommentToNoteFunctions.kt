@@ -7,6 +7,7 @@ class CommentToNoteFunctions {
         val comment = CommentToNote(commentID = bufferCommentID)
         bufferCommentID++
         comments.add(comment)
+        println("Комментарий к заметке создан")
         return comment.commentID
     }
 
