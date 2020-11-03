@@ -36,23 +36,44 @@ fun main() {
             attach = theFirstAttach
     )
 
+    var notes = ArrayList<Note>()
+    var deletedNotes = ArrayList<Note>()
+    var comments = ArrayList<CommentToNote>()
+    var deletedComments = ArrayList<CommentToNote>()
+
+
     println(theFirstPost)
     wallservice.add(theFirstPost)
     println(wallservice.update(theFirstPost))
     println(theFirstPost)
 
     val noteFunctions = NoteFunctions()
-    println(noteFunctions.add("first note", "some text"))
-    noteFunctions.printNotes()
-    noteFunctions.edit(noteID = 100, title = "first edited note", text = "some another text")
-    noteFunctions.printNotes()
+    println(noteFunctions.add("first note", "some text", notes))
+    println(notes)
+    noteFunctions.edit(noteID = 100, title = "first edited note", text = "some another text", notes)
+    println(notes)
 
-    val theFirstNoteID = noteFunctions.add("first note", "some text")
+    /*val theFirstNoteID = noteFunctions.add("first note", "some text",notes)
     val commentToNoteFunctions = CommentToNoteFunctions()
-    commentToNoteFunctions.createComment(noteID = theFirstNoteID, text = "some text in comment")
+    commentToNoteFunctions.createComment(noteID = theFirstNoteID, text = "some text in comment", comments = comments)
     println("theFirstNoteID = $theFirstNoteID")
-    noteFunctions.delete(theFirstNoteID)
+    noteFunctions.delete(theFirstNoteID, notes, deletedNotes, comments, deletedComments)
     println("theFirstNoteID = $theFirstNoteID")
-    noteFunctions.restore(theFirstNoteID)
+    noteFunctions.restore(theFirstNoteID, notes, deletedNotes)
+    println("theFirstNoteID = $theFirstNoteID")*/
+
+
+    val commentToNoteFunctions = CommentToNoteFunctions()
+    val theFirstNoteID = noteFunctions.add("first note", "some text", notes)
+    val commentID = commentToNoteFunctions.createComment(
+            noteID = theFirstNoteID,
+            text = "some text in comment",
+            comments = comments
+    )
     println("theFirstNoteID = $theFirstNoteID")
+    println("commentID = $commentID")
+    commentToNoteFunctions.printComment(comments[0])
+    noteFunctions.delete(theFirstNoteID, notes, deletedNotes, comments, deletedComments)
+
+    println(commentToNoteFunctions.isComment(commentID, comments))
 }

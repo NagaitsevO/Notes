@@ -1,17 +1,24 @@
 class CommentToNoteFunctions {
     var bufferCommentID: Int = 1
-    var comments = ArrayList<CommentToNote>()
-    var deletedComments = ArrayList<CommentToNote>()
+    //var comments = ArrayList<CommentToNote>()
+    //var deletedComments = ArrayList<CommentToNote>()
 
-    fun createComment(noteID: Int = 10, ownerID: Int = 100, text: String): Int {
-        val comment = CommentToNote(commentID = bufferCommentID)
+    fun printComment(comment: CommentToNote) {
+        print("commentID = ")
+        println(comment.commentID)
+        print("noteID = ")
+        println(comment.noteID)
+    }
+
+    fun createComment(noteID: Int, ownerID: Int = 100, text: String, comments: MutableList<CommentToNote>): Int {
+        val comment = CommentToNote(noteID = noteID, commentID = bufferCommentID)
         bufferCommentID++
         comments.add(comment)
         println("Комментарий к заметке создан")
         return comment.commentID
     }
 
-    fun editComment(commentID: Int, ownerID: Int = 100, message: String): Boolean {
+    fun editComment(commentID: Int, ownerID: Int = 100, message: String, comments: MutableList<CommentToNote>): Boolean {
         for ((index, comment) in comments.withIndex()) {
             if (comment.commentID == commentID) {
                 comments[index].text = message
@@ -23,8 +30,8 @@ class CommentToNoteFunctions {
         return false
     }
 
-    fun deleteComment(commentID: Int, ownerID: Int = 100): Boolean {
-        if (isCommentDeleted(commentID)) {
+    fun deleteComment(commentID: Int, comments: MutableList<CommentToNote>, deletedComments: MutableList<CommentToNote>): Boolean {
+        //if (!isCommentDeleted(commentID, deletedComments)) {
             for ((index, comment) in comments.withIndex()) {
                 if (comment.commentID == commentID) {
                     deletedComments.add(comments[index])
@@ -33,26 +40,26 @@ class CommentToNoteFunctions {
                     return true
                 }
             }
-        }
-        if (!isCommentDeleted(commentID)) {
+        //}
+        if (isCommentDeleted(commentID, deletedComments)) {
             println("Данный комментарий уже удалён")
         }
         println("Не удалось удалить комментарий к заметке")
         return false
     }
 
-    fun deleteAllCommentsToOneNote(noteID: Int): Boolean {
-        for ((index, comment) in comments.withIndex()) {
+    fun deleteAllCommentsToOneNote(noteID: Int, comments: MutableList<CommentToNote>, deletedComments: MutableList<CommentToNote>): Boolean {
+        for (comment in comments) {
             if (comment.noteID == noteID) {
-                deleteComment(comment.commentID)
+                deleteComment(comment.commentID, comments, deletedComments)
             }
             return true
         }
         return false
     }
 
-    fun restoreComment(commentID: Int, ownerID: Int = 100): Boolean {
-        if (isComment(commentID)) {
+    fun restoreComment(commentID: Int, ownerID: Int = 100, comments: MutableList<CommentToNote>, deletedComments: MutableList<CommentToNote>): Boolean {
+        if (isComment(commentID, comments)) {
             for ((index, comment) in comments.withIndex()) {
                 if (comment.commentID == commentID) {
                     comments.add(comments[index])
@@ -62,14 +69,14 @@ class CommentToNoteFunctions {
                 }
             }
         }
-        if (!isComment(commentID)) {
+        if (!isComment(commentID, comments)) {
             println("Данный комментарий не удалён")
         }
         println("Не удалось восстановить комментарий к заметке")
         return false
     }
 
-    fun getComments(commentID: Int, ownerID: Int = 100): CommentToNote? {
+    fun getComments(commentID: Int, ownerID: Int = 100, comments: MutableList<CommentToNote>): CommentToNote? {
         for ((index, comment) in comments.withIndex()) {
             if (comment.commentID == commentID) {
                 println("Комментарий найден")
@@ -80,8 +87,8 @@ class CommentToNoteFunctions {
         return null
     }
 
-    fun isCommentDeleted(commentID: Int): Boolean {
-        for ((index, comment) in deletedComments.withIndex()) {
+    fun isCommentDeleted(commentID: Int, deletedComments: MutableList<CommentToNote>): Boolean {
+        for (comment in deletedComments) {
             if (comment.commentID == commentID) {
                 return true
             }
@@ -89,8 +96,8 @@ class CommentToNoteFunctions {
         return false
     }
 
-    fun isComment(commentID: Int): Boolean {
-        for ((index, comment) in comments.withIndex()) {
+    fun isComment(commentID: Int, comments: MutableList<CommentToNote>): Boolean {
+        for (comment in comments) {
             if (comment.commentID == commentID) {
                 return true
             }

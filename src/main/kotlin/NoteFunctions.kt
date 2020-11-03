@@ -1,22 +1,16 @@
 class NoteFunctions {
 
     var bufferNoteID: Int = 100
-    var notes = ArrayList<Note>()
-    var deletedNotes = ArrayList<Note>()
 
-    fun printNotes(): Boolean {
-        println(notes)
-        return true
-    }
 
-    fun add(title: String, text: String): Int {
+    fun add(title: String, text: String, notes: MutableList<Note>): Int {
         val note = Note(noteID = bufferNoteID, title = title, text = text)
         bufferNoteID++
         notes.add(note)
         return note.noteID
     }
 
-    fun edit(noteID: Int, title: String, text: String): Boolean {
+    fun edit(noteID: Int, title: String, text: String, notes: MutableList<Note>): Boolean {
         for ((index, note) in notes.withIndex()) {
             if (note.noteID == noteID) {
                 notes[index].title = title
@@ -29,28 +23,28 @@ class NoteFunctions {
         return false
     }
 
-    fun delete(noteID: Int): Boolean {
+    fun delete(noteID: Int, notes: MutableList<Note>, deletedNotes: MutableList<Note>, comments: MutableList<CommentToNote>, deletedComments: MutableList<CommentToNote>): Boolean {
         val commentToNoteFunctions = CommentToNoteFunctions()
-        if (!isNoteDeleted(noteID)) {
+        if (!isNoteDeleted(noteID, deletedNotes)) {
             for ((index, note) in notes.withIndex()) {
                 if (note.noteID == noteID) {
                     deletedNotes.add(notes[index])
                     notes.remove(notes[index])
-                    commentToNoteFunctions.deleteAllCommentsToOneNote(noteID)
+                    commentToNoteFunctions.deleteAllCommentsToOneNote(noteID, comments, deletedComments)
                     println("Заметка удалена")
                     return true
                 }
             }
         }
-        if (isNoteDeleted(noteID)) {
+        if (isNoteDeleted(noteID, deletedNotes)) {
             println("Данная заметка уже удалена")
         }
         println("Не удалось удалить заметку")
         return false
     }
 
-    fun restore(noteID: Int): Boolean {
-        if (!isNote(noteID)) {
+    fun restore(noteID: Int, notes: MutableList<Note>, deletedNotes: MutableList<Note>): Boolean {
+        if (!isNote(noteID, notes)) {
             for ((index, note) in deletedNotes.withIndex()) {
                 if (note.noteID == noteID) {
                     notes.add(deletedNotes[index])
@@ -60,14 +54,14 @@ class NoteFunctions {
                 }
             }
         }
-        if (isNote(noteID)) {
+        if (isNote(noteID, notes)) {
             println("Данная заметка не удалена")
         }
         println("Не удалось восстановить заметку")
         return false
     }
 
-    fun getByID(noteID: Int, ownerID: Int = 100): Note? {
+    fun getByID(noteID: Int, ownerID: Int = 100, notes: MutableList<Note>): Note? {
         for ((index, note) in notes.withIndex()) {
             if (note.noteID == noteID) {
                 println("Заметка найдена")
@@ -78,7 +72,7 @@ class NoteFunctions {
         return null
     }
 
-    fun getNotes(noteIDs: Array<Int>, ownerID: Int = 100): ArrayList<Note>? {
+    fun getNotes(noteIDs: Array<Int>, ownerID: Int = 100, notes: MutableList<Note>): ArrayList<Note>? {
         var i: Int = 0
         var foundNotes = ArrayList<Note>()
         for ((index, note) in notes.withIndex()) {
@@ -95,7 +89,7 @@ class NoteFunctions {
         return foundNotes
     }
 
-    fun isNoteDeleted(noteID: Int): Boolean {
+    fun isNoteDeleted(noteID: Int, deletedNotes: MutableList<Note>): Boolean {
         for ((index, note) in deletedNotes.withIndex()) {
             if (note.noteID == noteID) {
                 return true
@@ -104,7 +98,7 @@ class NoteFunctions {
         return false
     }
 
-    fun isNote(noteID: Int): Boolean {
+    fun isNote(noteID: Int, notes: MutableList<Note>): Boolean {
         for ((index, note) in notes.withIndex()) {
             if (note.noteID == noteID) {
                 return true
